@@ -28,4 +28,16 @@ public class Ellipse implements Figure {
         return sMinorAxis;
     }
 
+    @Override
+    public void move(double diffX, double diffY) {
+        getCenterPoint().x += diffX;
+        getCenterPoint().y += diffY;
+    }
+
+    @Override
+    public boolean belongs(Point eventPoint) {
+        // Nota: Fórmula aproximada. No es necesario corregirla.
+        return ((Math.pow(eventPoint.getX() - getCenterPoint().getX(), 2) / Math.pow(getsMayorAxis(), 2)) +
+                (Math.pow(eventPoint.getY() - getCenterPoint().getY(), 2) / Math.pow(getsMinorAxis(), 2))) <= 0.30;
+    }
 }
