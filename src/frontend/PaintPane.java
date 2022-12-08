@@ -3,6 +3,7 @@ package frontend;
 import backend.CanvasState;
 import backend.model.*;
 import com.sun.javafx.scene.web.skin.HTMLEditorSkin;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -71,6 +72,7 @@ public class PaintPane extends BorderPane {
 	// StatusBar
 	StatusPane statusPane;
 	Colors format;
+
 
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
@@ -263,6 +265,12 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+		cutButton.setOnKeyPressed(event -> {
+			if (event.getCode() == KeyCode.X && event.isControlDown()) {
+				System.out.println("cut con atajo"); // hacer que funcione posta
+			}
+		});
+
 		cutButton.setOnAction(event -> {
 			if (selectedFigure != null) {
 				auxFigure = selectedFigure;
@@ -288,7 +296,7 @@ public class PaintPane extends BorderPane {
 				});
 			}
 		});*/
-		
+
 		setTop(buttonsTop);
 		setLeft(buttonsBox);
 		setRight(canvas);
