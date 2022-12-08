@@ -288,9 +288,7 @@ public class PaintPane extends BorderPane {
 				});
 			}
 		});*/
-
-
-
+		
 		setTop(buttonsTop);
 		setLeft(buttonsBox);
 		setRight(canvas);
