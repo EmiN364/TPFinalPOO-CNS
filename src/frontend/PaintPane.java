@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.Node.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
+
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -48,7 +50,7 @@ public class PaintPane extends BorderPane {
 	//Botones para barra superior
 	private Image getIcon(String name) {
 		String IconPath = ResourceBundle.getBundle(HTMLEditorSkin.class.getName()).getString(name);
-		return new Image(HTMLEditorSkin.class.getResource(IconPath).toString());
+		return new Image(Objects.requireNonNull(HTMLEditorSkin.class.getResource(IconPath)).toString());
 	}
 
 	Button cutButton = new Button("Cortar", new ImageView(getIcon("cutIcon")));
