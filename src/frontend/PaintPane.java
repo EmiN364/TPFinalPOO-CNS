@@ -4,6 +4,7 @@ import backend.CanvasState;
 import backend.model.*;
 import com.sun.javafx.scene.web.skin.HTMLEditorSkin;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.Node.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
+
 
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -56,6 +58,8 @@ public class PaintPane extends BorderPane {
 	Button cutButton = new Button("Cortar", new ImageView(getIcon("cutIcon")));
 	Button copyButton = new Button("Copiar", new ImageView(getIcon("copyIcon")));
 	Button pasteButton = new Button("Pegar", new ImageView(getIcon("pasteIcon")));
+	Button deshacerButton = new Button("Deshacer", new ImageView(getIcon("undoIcon")));
+	Button rehacerButton = new Button("Rehacer", new ImageView(getIcon("redoIcon")));
 
 	// Dibujar una figura
 	Point startPoint;
@@ -86,10 +90,19 @@ public class PaintPane extends BorderPane {
 			tool.setCursor(Cursor.HAND);
 		}
 		VBox buttonsBox = new VBox(10);
-		HBox buttonTop= new HBox(10);
-		buttonTop.getChildren().addAll(cutButton,copyButton,pasteButton);
-		buttonTop.setPadding(new Insets(5));
-		buttonTop.setStyle("-fx-background-color: #999");
+		VBox buttonsTop = new VBox(10);
+		HBox buttonsTop1= new HBox(10);
+		HBox buttonsTop2 = new HBox(10);
+		buttonsTop2.getChildren().addAll(deshacerButton, rehacerButton);
+		buttonsTop2.setPadding(new Insets(5));
+		buttonsTop2.setStyle("-fx-background-color: #999");
+		buttonsTop2.setAlignment(Pos.CENTER);
+		buttonsTop1.getChildren().addAll(cutButton,copyButton,pasteButton);
+		buttonsTop1.setPadding(new Insets(5));
+		buttonsTop1.setStyle("-fx-background-color: #999");
+		buttonsTop.getChildren().addAll(buttonsTop1, buttonsTop2);
+		buttonsTop.setStyle("-fx-background-color: #999");
+		buttonsTop.setPrefWidth(600);
 		buttonsBox.getChildren().addAll(toolsArr);
 		borderSlider.setShowTickMarks(true);
 		borderSlider.setShowTickLabels(true);
@@ -204,6 +217,8 @@ public class PaintPane extends BorderPane {
 					format = null;
 					redrawCanvas();
 				}
+			}else if(pasteButton.isPressed()){
+				canvasState.addFigure(auxFigure);
 			}
 
 		});
@@ -263,17 +278,20 @@ public class PaintPane extends BorderPane {
 				selectedFigure = null;
 			}
 		});
-		pasteButton.setOnAction(event -> {
+		/*pasteButton.setOnAction(event -> { // arreglar
 			if(auxFigure != null){
-				// crear la nueva figura (auxFigure) en el nuevo lugar que clickee
+				canvas.setOnMouseClicked(event1 ->{
+					Point centerPoint = new Point( canvas.getWidth()/2, canvas.getHeight()/2);
+					canvasState.addFigure(auxFigure);
+					redrawCanvas();
+					auxFigure = null;
+				});
 			}
-			auxFigure = null;
-		});
+		});*/
 
 
 
-
-		setTop(buttonTop);
+		setTop(buttonsTop);
 		setLeft(buttonsBox);
 		setRight(canvas);
 	}
