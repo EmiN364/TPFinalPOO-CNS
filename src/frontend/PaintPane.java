@@ -62,6 +62,7 @@ public class PaintPane extends BorderPane {
 
 	// Seleccionar una figura
 	Figure selectedFigure;
+	Figure auxFigure;
 
 	// StatusBar
 	StatusPane statusPane;
@@ -246,6 +247,32 @@ public class PaintPane extends BorderPane {
 				redrawCanvas();
 			}
 		});
+
+		cutButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				auxFigure = selectedFigure;
+				canvasState.deleteFigure(selectedFigure); // VER SI ESTOS 3 REGLONES SE PUEDEN CAMBIAR LLAMANDO A DELETE.SETONACTION
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		copyButton.setOnAction(event -> {
+			if (selectedFigure != null){
+				auxFigure = selectedFigure;
+				selectedFigure = null;
+			}
+		});
+		pasteButton.setOnAction(event -> {
+			if(auxFigure != null){
+				// crear la nueva figura (auxFigure) en el nuevo lugar que clickee
+			}
+			auxFigure = null;
+		});
+
+
+
+
 		setTop(buttonTop);
 		setLeft(buttonsBox);
 		setRight(canvas);
