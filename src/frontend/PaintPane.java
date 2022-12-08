@@ -65,10 +65,18 @@ public class PaintPane extends BorderPane {
 
 	// StatusBar
 	StatusPane statusPane;
+	Colors format;
 
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
+
+		copyFormatButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				format = new Colors(selectedFigure.getLineColor(), selectedFigure.getFillColor(), selectedFigure.getBorderSize());
+			}
+		});
+
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, copyFormatButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
@@ -84,6 +92,24 @@ public class PaintPane extends BorderPane {
 		buttonsBox.getChildren().addAll(toolsArr);
 		borderSlider.setShowTickMarks(true);
 		borderSlider.setShowTickLabels(true);
+		borderSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+			if (selectedFigure != null) {
+				selectedFigure.setBorderSize(newValue.doubleValue());
+				redrawCanvas();
+			}
+		});
+		lineColorPicker.setOnAction( event -> {
+			if (selectedFigure != null) {
+				selectedFigure.setLineColor(lineColorPicker.getValue());
+				redrawCanvas();
+			}
+		});
+		fillColorPicker.setOnAction( event -> {
+			if (selectedFigure != null) {
+				selectedFigure.setFillColor(fillColorPicker.getValue());
+				redrawCanvas();
+			}
+		});
 		buttonsBox.getChildren().addAll(sliderName, borderSlider, lineColorPicker, fillName, fillColorPicker);
 		buttonsBox.setPadding(new Insets(5));
 		buttonsBox.setStyle("-fx-background-color: #999");
@@ -162,7 +188,23 @@ public class PaintPane extends BorderPane {
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
 				redrawCanvas();
+			} else if(copyFormatButton.isSelected()) {
+				Point eventPoint = new Point(event.getX(), event.getY());
+				Figure clickedFigure = null;
+				for (Figure figure : canvasState.figures()) {
+					if(figureBelongs(figure, eventPoint)) {
+						clickedFigure = figure;
+					}
+				}
+				if (clickedFigure != null && format != null) {
+					clickedFigure.setFillColor(format.fill);
+					clickedFigure.setLineColor(format.border);
+					clickedFigure.setBorderSize(format.size);
+					format = null;
+					redrawCanvas();
+				}
 			}
+
 		});
 
 		canvas.setOnMouseDragged(event -> {
@@ -267,6 +309,17 @@ public class PaintPane extends BorderPane {
 		}
 		return found;*/
 		return figure.belongs(eventPoint);
+	}
+
+	private static class Colors {
+		Color border, fill;
+		double size;
+
+		public Colors(Color border, Color fill, double size) {
+			this.border = border;
+			this.fill = fill;
+			this.size = size;
+		}
 	}
 
 }
