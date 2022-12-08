@@ -26,10 +26,10 @@ public class Rectangle implements Figure {
 
     @Override
     public void move(double diffX, double diffY) {
-        getTopLeft().x += diffX;
-        getBottomRight().x += diffX;
-        getTopLeft().y += diffY;
-        getBottomRight().y += diffY;
+        getTopLeft().moveX(diffX);
+        getBottomRight().moveX(diffX);
+        getTopLeft().moveY(diffY);
+        getBottomRight().moveY(diffY);
     }
 
     @Override

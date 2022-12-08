@@ -32,8 +32,8 @@ public class Ellipse implements Figure {
 
     @Override
     public void move(double diffX, double diffY) {
-        getCenterPoint().x += diffX;
-        getCenterPoint().y += diffY;
+        getCenterPoint().moveX(diffX);
+        getCenterPoint().moveY(diffY);
     }
 
     @Override
