@@ -2,14 +2,22 @@ package frontend;
 
 import backend.CanvasState;
 import backend.model.*;
+import com.sun.javafx.scene.web.skin.HTMLEditorSkin;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.Node.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
+import java.util.ResourceBundle;
 
 
 public class PaintPane extends BorderPane {
@@ -36,6 +44,17 @@ public class PaintPane extends BorderPane {
 	ColorPicker fillColorPicker = new ColorPicker(fillColor);
 	Label sliderName = new Label("Borde");
 	Label fillName = new Label("Relleno");
+
+	//Botones para barra superior
+	private Image getIcon(String name) {
+		String IconPath = ResourceBundle.getBundle(HTMLEditorSkin.class.getName()).getString(name);
+		return new Image(HTMLEditorSkin.class.getResource(IconPath).toString());
+	}
+
+	Button cutButton = new Button("Cortar", new ImageView(getIcon("cutIcon")));
+	Button copyButton = new Button("Copiar", new ImageView(getIcon("copyIcon")));
+	Button pasteButton = new Button("Pegar", new ImageView(getIcon("pasteIcon")));
+
 	// Dibujar una figura
 	Point startPoint;
 
@@ -56,6 +75,10 @@ public class PaintPane extends BorderPane {
 			tool.setCursor(Cursor.HAND);
 		}
 		VBox buttonsBox = new VBox(10);
+		HBox buttonTop= new HBox(10);
+		buttonTop.getChildren().addAll(cutButton,copyButton,pasteButton);
+		buttonTop.setPadding(new Insets(5));
+		buttonTop.setStyle("-fx-background-color: #999");
 		buttonsBox.getChildren().addAll(toolsArr);
 		borderSlider.setShowTickMarks(true);
 		borderSlider.setShowTickLabels(true);
@@ -176,7 +199,7 @@ public class PaintPane extends BorderPane {
 				redrawCanvas();
 			}
 		});
-
+		setTop(buttonTop);
 		setLeft(buttonsBox);
 		setRight(canvas);
 	}
