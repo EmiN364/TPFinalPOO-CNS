@@ -3,7 +3,6 @@ package frontend;
 import backend.CanvasState;
 import backend.model.*;
 import com.sun.javafx.scene.web.skin.HTMLEditorSkin;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -16,8 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.Node.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
 
@@ -219,8 +216,6 @@ public class PaintPane extends BorderPane {
 					format = null;
 					redrawCanvas();
 				}
-			}else if(pasteButton.isPressed()){
-				canvasState.addFigure(auxFigure);
 			}
 
 		});
@@ -265,9 +260,14 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		cutButton.setOnKeyPressed(event -> {
-			if (event.getCode() == KeyCode.X && event.isControlDown()) {
-				System.out.println("cut con atajo"); // hacer que funcione posta
+		setOnKeyPressed( event -> {
+			if (event.isControlDown()) {
+				if (event.getCode() == KeyCode.X)
+					cutButton.fire();
+				else if (event.getCode() == KeyCode.C)
+					copyButton.fire();
+				else if (event.getCode() == KeyCode.V)
+					pasteButton.fire();
 			}
 		});
 
@@ -286,16 +286,31 @@ public class PaintPane extends BorderPane {
 				selectedFigure = null;
 			}
 		});
-		/*pasteButton.setOnAction(event -> { // arreglar
-			if(auxFigure != null){
-				canvas.setOnMouseClicked(event1 ->{
+		pasteButton.setOnAction(event -> {
+			if(auxFigure != null) {
+				Figure newFigure;
+				if(auxFigure instanceof Rectangle) {
+					Rectangle aux = (Rectangle) auxFigure;
+					double height = aux.getBottomRight().getX() - aux.getTopLeft().getX();
+					double width = aux.getBottomRight().getY() - aux.getTopLeft().getY();
+					Point topLeft = new Point(canvas.getWidth()/2 - height/2, canvas.getHeight()/2 - width/2);
+					Point bottomRight = new Point(canvas.getWidth()/2 + height/2, canvas.getHeight()/2 + width/2);
+					newFigure = new Rectangle(topLeft, bottomRight);
+				} else if(auxFigure instanceof Ellipse) {
+					Ellipse aux = (Ellipse) auxFigure;
 					Point centerPoint = new Point( canvas.getWidth()/2, canvas.getHeight()/2);
-					canvasState.addFigure(auxFigure);
-					redrawCanvas();
-					auxFigure = null;
-				});
+					newFigure = new Ellipse(centerPoint, aux.getsMayorAxis(), aux.getsMinorAxis());
+				} else {
+					return ;
+				}
+				newFigure.setFillColor(auxFigure.getFillColor());
+				newFigure.setLineColor(auxFigure.getLineColor());
+				newFigure.setBorderSize(auxFigure.getBorderSize());
+				canvasState.addFigure(newFigure);
+				redrawCanvas();
+				auxFigure = null;
 			}
-		});*/
+		});
 
 		setTop(buttonsTop);
 		setLeft(buttonsBox);
