@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 public abstract class Figure {
     private Color lineColor, fillColor;
     private double borderSize;
+    public abstract  String getName();
 
     public double getBorderSize() {
         return borderSize;
