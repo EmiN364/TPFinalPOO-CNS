@@ -16,8 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.input.KeyCode;
-
-
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -64,12 +62,11 @@ public class PaintPane extends BorderPane {
 
 	// Seleccionar una figura
 	Figure selectedFigure;
-	public static Figure auxFigure;
 
 	// StatusBar
 	StatusPane statusPane;
 
-
+	Deque<Operation>
 
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
