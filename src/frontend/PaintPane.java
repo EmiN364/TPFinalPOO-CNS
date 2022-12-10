@@ -64,11 +64,11 @@ public class PaintPane extends BorderPane {
 
 	// Seleccionar una figura
 	Figure selectedFigure;
-	Figure auxFigure;
+	public static Figure auxFigure;
 
 	// StatusBar
 	StatusPane statusPane;
-	Colors format;
+
 
 
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
@@ -77,7 +77,7 @@ public class PaintPane extends BorderPane {
 
 		copyFormatButton.setOnAction(event -> {
 			if (selectedFigure != null) {
-				format = new Colors(selectedFigure.getLineColor(), selectedFigure.getFillColor(), selectedFigure.getBorderSize());
+				canvasState.setAuxFigure(selectedFigure);
 			}
 		});
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, copyFormatButton};
@@ -205,11 +205,11 @@ public class PaintPane extends BorderPane {
 						clickedFigure = figure;
 					}
 				}
-				if (clickedFigure != null && format != null) {
-					clickedFigure.setFillColor(format.fill);
-					clickedFigure.setLineColor(format.border);
-					clickedFigure.setBorderSize(format.size);
-					format = null;
+				if (clickedFigure != null && canvasState.getAuxFigure() != null) {
+					clickedFigure.setFillColor(canvasState.getAuxFigure().getFillColor());
+					clickedFigure.setLineColor(canvasState.getAuxFigure().getLineColor());
+					clickedFigure.setBorderSize(canvasState.getAuxFigure().getBorderSize());
+					canvasState.setAuxFigure(null);
 					redrawCanvas();
 				}
 			}
@@ -308,14 +308,6 @@ public class PaintPane extends BorderPane {
 		return figure.belongs(eventPoint);
 	}
 
-	private static class Colors {
-		Color border, fill;
-		double size;
-		public Colors(Color border, Color fill, double size) {
-			this.border = border;
-			this.fill = fill;
-			this.size = size;
-		}
-	}
+
 
 }

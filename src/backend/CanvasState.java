@@ -1,11 +1,14 @@
 package backend;
 
 import backend.model.Figure;
+import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasState {
+    private Figure auxFigure;
 
     private final List<Figure> list = new ArrayList<>();
 
@@ -21,4 +24,11 @@ public class CanvasState {
         return new ArrayList<>(list);
     }
 
+    public void setAuxFigure(Figure figure) {
+        this.auxFigure = figure;
+    }
+
+    public Figure getAuxFigure() {
+        return auxFigure;
+    }
 }
