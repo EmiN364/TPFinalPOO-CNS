@@ -3,17 +3,19 @@ package backend.model;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Ellipse extends Figure {
-    private static final String NAME="Elipse";
+    private static final String NAME = "Elipse";
     private final Point centerPoint;
     private final double sMayorAxis, sMinorAxis;
 
-    public String getName(){return NAME;}
     public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
         this.centerPoint = centerPoint;
         this.sMayorAxis = sMayorAxis;
         this.sMinorAxis = sMinorAxis;
     }
-
+    @Override
+    public String getName() {
+        return NAME;
+    }
     @Override
     public String toString() {
         return String.format("Elipse [Centro: %s, DMayor: %.2f, DMenor: %.2f]", centerPoint, sMayorAxis, sMinorAxis);

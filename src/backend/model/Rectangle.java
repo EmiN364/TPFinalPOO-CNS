@@ -3,14 +3,16 @@ package backend.model;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Rectangle extends Figure {
-    private static final String NAME="Rectángulo";
+    private static final String NAME = "Rectángulo";
     private final Point topLeft, bottomRight;
-    public String getName(){return NAME;}
     public Rectangle(Point topLeft, Point bottomRight) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
     }
-
+    @Override
+    public String getName() {
+        return NAME;
+    }
     public Point getTopLeft() {
         return topLeft;
     }
