@@ -80,7 +80,6 @@ public class PaintPane extends BorderPane {
 				format = new Colors(selectedFigure.getLineColor(), selectedFigure.getFillColor(), selectedFigure.getBorderSize());
 			}
 		});
-
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, copyFormatButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
@@ -93,14 +92,11 @@ public class PaintPane extends BorderPane {
 		HBox buttonsTop1= new HBox(10);
 		HBox buttonsTop2 = new HBox(10);
 		buttonsTop2.getChildren().addAll(undoButton, redoButton);
-		buttonsTop2.setPadding(new Insets(5));
-		buttonsTop2.setStyle("-fx-background-color: #999");
 		buttonsTop2.setAlignment(Pos.CENTER);
 		buttonsTop1.getChildren().addAll(cutButton,copyButton,pasteButton);
-		buttonsTop1.setPadding(new Insets(5));
-		buttonsTop1.setStyle("-fx-background-color: #999");
 		buttonsTop.getChildren().addAll(buttonsTop1, buttonsTop2);
 		buttonsTop.setStyle("-fx-background-color: #999");
+		buttonsTop.setPadding(new Insets(5));
 		buttonsTop.setPrefWidth(600);
 		buttonsBox.getChildren().addAll(toolsArr);
 		borderSlider.setShowTickMarks(true);
