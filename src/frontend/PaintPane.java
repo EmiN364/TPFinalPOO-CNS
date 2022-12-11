@@ -161,24 +161,14 @@ public class PaintPane extends BorderPane {
 			if(endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
 				return ;
 			}
-			Figure newFigure;
-			if(rectangleButton.isSelected()) {
-				newFigure = new Rectangle(startPoint, endPoint, lineColorPicker.getValue(), fillColorPicker.getValue(), borderSlider.getValue());
+			FigureButton[] figureButtons = {rectangleButton, circleButton, squareButton, ellipseButton};
+			Figure newFigure = null;
+			for(FigureButton figureButton : figureButtons) {
+				if (figureButton.isSelected())
+					newFigure = figureButton.getFigureType().create(startPoint, endPoint, lineColorPicker.getValue(), fillColorPicker.getValue(), borderSlider.getValue());
 			}
-			else if(circleButton.isSelected()) {
-				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new Circle(startPoint, circleRadius, lineColorPicker.getValue(), fillColorPicker.getValue(), borderSlider.getValue());
-			} else if(squareButton.isSelected()) {
-				double size = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new Square(startPoint, size, lineColorPicker.getValue(), fillColorPicker.getValue(), borderSlider.getValue());
-			} else if(ellipseButton.isSelected()) {
-				Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
-				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
-				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-				newFigure = new Ellipse(centerPoint, sMayorAxis, sMinorAxis, lineColorPicker.getValue(), fillColorPicker.getValue(), borderSlider.getValue());
-			} else {
-				return ;
-			}
+			if (newFigure == null)
+				return;
 			canvasState.addFigure(newFigure);
 			addOperation(OperationType.DRAW, null, newFigure);
 			startPoint = null;
