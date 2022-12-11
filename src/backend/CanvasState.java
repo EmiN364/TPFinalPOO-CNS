@@ -26,6 +26,10 @@ public class CanvasState {
         this.clipBoardFigure = figure;
     }
 
+    public void clearClipBoardFigure() {
+        this.clipBoardFigure = null;
+    }
+
     public Figure getClipBoardFigure() {
         return clipBoardFigure;
     }
