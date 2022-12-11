@@ -69,37 +69,37 @@ public enum OperationType {
     COPYFORMAT("Copiar formato de ") {
         @Override
         public void undo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            canvasState.setAuxFigure(newFigure.clone());
+            canvasState.setClipBoardFigure(newFigure.clone());
             newFigure.setFormat(oldFigure);
         }
 
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            newFigure.setFormat(canvasState.getAuxFigure());
-            canvasState.setAuxFigure(null);
+            newFigure.setFormat(canvasState.getClipBoardFigure());
+            canvasState.setClipBoardFigure(null);
         }
     },
     COPYFIGURE("Copiar un ") {
         @Override
         public void undo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            canvasState.setAuxFigure(oldFigure);
+            canvasState.setClipBoardFigure(oldFigure);
         }
 
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            canvasState.setAuxFigure(newFigure);
+            canvasState.setClipBoardFigure(newFigure);
         }
     },
     CUTFIGURE("Cortar un ") {
         @Override
         public void undo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            canvasState.setAuxFigure(oldFigure);
+            canvasState.setClipBoardFigure(oldFigure);
             canvasState.addFigure(newFigure);
         }
 
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            canvasState.setAuxFigure(newFigure);
+            canvasState.setClipBoardFigure(newFigure);
             canvasState.deleteFigure(oldFigure);
         }
     },
@@ -107,13 +107,13 @@ public enum OperationType {
         @Override
         public void undo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
             canvasState.deleteFigure(newFigure);
-            canvasState.setAuxFigure(oldFigure);
+            canvasState.setClipBoardFigure(oldFigure);
         }
 
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
             canvasState.addFigure(newFigure);
-            canvasState.setAuxFigure(null);
+            canvasState.setClipBoardFigure(null);
         }
     };
 

@@ -77,7 +77,7 @@ public class PaintPane extends BorderPane {
 
 		copyFormatButton.setOnAction(event -> {
 			if (selectedFigure != null) {
-				canvasState.setAuxFigure(selectedFigure);
+				canvasState.setClipBoardFigure(selectedFigure);
 			}
 		});
 		undoButton.setOnAction(event -> {
@@ -214,17 +214,17 @@ public class PaintPane extends BorderPane {
 			} else if(copyFormatButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				Figure clickedFigure = null;
-				Figure auxFigure = canvasState.getAuxFigure();
+				Figure clipBoardFigure = canvasState.getClipBoardFigure();
 				for (Figure figure : canvasState.figures()) {
 					if(figureBelongs(figure, eventPoint)) {
 						clickedFigure = figure;
 					}
 				}
-				if (clickedFigure != null && auxFigure != null) {
+				if (clickedFigure != null && clipBoardFigure != null) {
 					Figure oldFigure = clickedFigure.clone();
-					clickedFigure.setFormat(auxFigure);
+					clickedFigure.setFormat(clipBoardFigure);
 					addOperation(OperationType.COPYFORMAT, oldFigure, clickedFigure);
-					canvasState.setAuxFigure(null);
+					canvasState.setClipBoardFigure(null);
 					redrawCanvas();
 				}
 			}
@@ -269,9 +269,9 @@ public class PaintPane extends BorderPane {
 
 		cutButton.setOnAction(event -> {
 			if (selectedFigure != null) {
-				Figure auxFig = canvasState.getAuxFigure();
-				canvasState.setAuxFigure(selectedFigure);
-				addOperation(OperationType.CUTFIGURE, auxFig, selectedFigure);
+				Figure clipBoardFig = canvasState.getClipBoardFigure();
+				canvasState.setClipBoardFigure(selectedFigure);
+				addOperation(OperationType.CUTFIGURE, clipBoardFig, selectedFigure);
 				canvasState.deleteFigure(selectedFigure);
 				selectedFigure = null;
 				redrawCanvas();
@@ -280,19 +280,19 @@ public class PaintPane extends BorderPane {
 
 		copyButton.setOnAction(event -> {
 			if (selectedFigure != null){
-				Figure auxFig = canvasState.getAuxFigure();
-				canvasState.setAuxFigure(selectedFigure);
-				addOperation(OperationType.COPYFIGURE, auxFig, selectedFigure);
+				Figure clipBoardFig = canvasState.getClipBoardFigure();
+				canvasState.setClipBoardFigure(selectedFigure);
+				addOperation(OperationType.COPYFIGURE, clipBoardFig, selectedFigure);
 			}
 		});
 		pasteButton.setOnAction(event -> {
-			Figure auxFigure = canvasState.getAuxFigure();
-			if(auxFigure != null) {
-				Figure newFigure = auxFigure.getCenteredCopy(canvas.getWidth()/2, canvas.getHeight()/2);
+			Figure clipBoardFig = canvasState.getClipBoardFigure();
+			if(clipBoardFig != null) {
+				Figure newFigure = clipBoardFig.getCenteredCopy(canvas.getWidth()/2, canvas.getHeight()/2);
 				canvasState.addFigure(newFigure);
 				redrawCanvas();
-				canvasState.setAuxFigure(null);
-				addOperation(OperationType.PASTEFIGURE, auxFigure, newFigure);
+				canvasState.setClipBoardFigure(null);
+				addOperation(OperationType.PASTEFIGURE, clipBoardFig, newFigure);
 			}
 		});
 
@@ -330,7 +330,4 @@ public class PaintPane extends BorderPane {
 	boolean figureBelongs(Figure figure, Point eventPoint) {
 		return figure.belongs(eventPoint);
 	}
-
-
-
 }
