@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>D:/Datos/Documents/GitHub/TPFinalPOO-CNS/src</OriginalElement>
+  <nodes>
+    <node x="-395.0" y="1495.0">frontend.AppMenuBar</node>
+    <node x="862.0" y="-97.0">frontend.FigureButton.FigureType</node>
+    <node x="223.0" y="1050.0">backend.model.Point</node>
+    <node x="-104.0" y="295.0">backend.model.Rectangle</node>
+    <node x="750.0" y="1050.0">frontend.StatusPane</node>
+    <node x="978.0" y="1050.0">frontend.AppLauncher</node>
+    <node x="-134.0" y="1050.0">backend.OperationsHistory</node>
+    <node x="-104.0" y="773.0">backend.model.Square</node>
+    <node x="875.5" y="-267.0">frontend.FigureButton</node>
+    <node x="564.0" y="-267.0">backend.OperationType</node>
+    <node x="-392.5" y="773.0">backend.model.Circle</node>
+    <node x="1172.0" y="1050.0">frontend.MainFrame</node>
+    <node x="-248.25" y="-267.0">backend.model.Figure</node>
+    <node x="-395.0" y="1050.0">backend.CanvasState</node>
+    <node x="436.0" y="1050.0">backend.Operation</node>
+    <node x="-395.0" y="267.0">backend.model.Ellipse</node>
+    <node x="207.0" y="-267.0">frontend.PaintPane</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="backend.model.Circle" target="backend.model.Ellipse" relationship="GENERALIZATION">
+      <point x="0.0" y="-116.0" />
+      <point x="0.0" y="228.0" />
+    </edge>
+    <edge source="backend.model.Ellipse" target="backend.model.Figure" relationship="GENERALIZATION">
+      <point x="0.0" y="-228.0" />
+      <point x="-259.5" y="242.0" />
+      <point x="-115.25" y="242.0" />
+      <point x="0.0" y="242.0" />
+    </edge>
+    <edge source="backend.model.Square" target="backend.model.Rectangle" relationship="GENERALIZATION">
+      <point x="0.0" y="-116.0" />
+      <point x="0.0" y="200.0" />
+    </edge>
+    <edge source="backend.model.Rectangle" target="backend.model.Figure" relationship="GENERALIZATION">
+      <point x="0.0" y="-200.0" />
+      <point x="29.0" y="242.0" />
+      <point x="-115.25" y="242.0" />
+      <point x="0.0" y="242.0" />
+    </edge>
+    <edge source="frontend.FigureButton.FigureType" target="frontend.FigureButton" relationship="INNER_CLASS">
+      <point x="0.0" y="-130.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.4500542888165038" showDependencies="false" x="490.5" y="654.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
