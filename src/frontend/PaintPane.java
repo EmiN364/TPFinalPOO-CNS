@@ -288,21 +288,7 @@ public class PaintPane extends BorderPane {
 		pasteButton.setOnAction(event -> {
 			Figure auxFigure = canvasState.getAuxFigure();
 			if(auxFigure != null) {
-				Figure newFigure;
-				if(auxFigure instanceof Rectangle) {
-					Rectangle aux = (Rectangle) auxFigure;
-					double height = aux.getBottomRight().getX() - aux.getTopLeft().getX();
-					double width = aux.getBottomRight().getY() - aux.getTopLeft().getY();
-					Point topLeft = new Point(canvas.getWidth()/2 - height/2, canvas.getHeight()/2 - width/2);
-					Point bottomRight = new Point(canvas.getWidth()/2 + height/2, canvas.getHeight()/2 + width/2);
-					newFigure = new Rectangle(topLeft, bottomRight, auxFigure.getLineColor(), auxFigure.getFillColor(), aux.getBorderSize());
-				} else if(auxFigure instanceof Ellipse) {
-					Ellipse aux = (Ellipse) auxFigure;
-					Point centerPoint = new Point( canvas.getWidth()/2, canvas.getHeight()/2);
-					newFigure = new Ellipse(centerPoint, aux.getsMayorAxis(), aux.getsMinorAxis(), auxFigure.getLineColor(), auxFigure.getFillColor(), aux.getBorderSize());
-				} else {
-					return ;
-				}
+				Figure newFigure = auxFigure.getCenteredCopy(canvas.getWidth()/2, canvas.getHeight()/2);
 				canvasState.addFigure(newFigure);
 				redrawCanvas();
 				canvasState.setAuxFigure(null);
