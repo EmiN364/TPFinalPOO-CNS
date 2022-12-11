@@ -1,12 +1,10 @@
 package backend.model;
 
-import javafx.scene.paint.Color;
-
 public class Circle extends Ellipse {
     private static final String NAME = "Círculo";
 
-    public Circle(Point centerPoint, double radius, Color lineColor, Color fillColor, double borderSize) {
-        super(centerPoint, 2 * radius, 2 * radius, lineColor, fillColor, borderSize);
+    public Circle(Point centerPoint, double radius, FigureStyle figureStyle) {
+        super(centerPoint, 2 * radius, 2 * radius, figureStyle);
     }
     @Override
     public String getName() {

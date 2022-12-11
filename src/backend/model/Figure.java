@@ -12,8 +12,8 @@ public abstract class Figure implements Cloneable {
 
     public abstract String getName();
 
-    public FigureStyle getFigureStyle() {
-        return figureStyle;
+    public FigureStyle getFigureStyleCopy() {
+        return figureStyle.getCopy();
     }
     public Color getFillColor() {
         return figureStyle.getFillColor();
