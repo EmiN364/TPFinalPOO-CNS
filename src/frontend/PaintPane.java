@@ -70,22 +70,6 @@ public class PaintPane extends BorderPane {
 		this.statusPane = statusPane;
 		this.operationsHistory = new OperationsHistory(canvasState);
 
-		copyFormatButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				addOperation(OperationType.COPYFORMAT, canvasState.getFormatFigure(), selectedFigure);
-				canvasState.setFormatFigure(selectedFigure);
-			}
-		});
-		undoButton.setOnAction(event -> {
-			operationsHistory.undoOperation();
-			updateUndosRedos();
-			redrawCanvas();
-		});
-		redoButton.setOnAction(event -> {
-			operationsHistory.redoOperation();
-			updateUndosRedos();
-			redrawCanvas();
-		});
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, copyFormatButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
@@ -98,49 +82,23 @@ public class PaintPane extends BorderPane {
 		HBox buttonsTop1 = new HBox(10);
 		HBox buttonsTop2 = new HBox(10);
 
+		setStyle(undoNext, Pos.CENTER_RIGHT, 300);
+		setStyle(redoNext, Pos.CENTER_LEFT, 300);
+		setStyle(undoAmount, Pos.CENTER, 30);
+		setStyle(redoAmount, Pos.CENTER, 30);
 		buttonsTop2.getChildren().addAll(undoNext, undoAmount, undoButton, redoButton, redoAmount, redoNext);
-		undoNext.setAlignment(Pos.CENTER_RIGHT);
-		undoNext.setPrefWidth(300);
-		redoNext.setPrefWidth(300);
-		redoNext.setAlignment(Pos.CENTER_LEFT);
-		undoAmount.setAlignment(Pos.CENTER);
-		undoAmount.setPrefWidth(30);
-		redoAmount.setPrefWidth(30);
-		redoAmount.setAlignment(Pos.CENTER);
 		buttonsTop2.setAlignment(Pos.CENTER);
 
 		buttonsTop1.getChildren().addAll(cutButton,copyButton,pasteButton);
+
 		buttonsTop.getChildren().addAll(buttonsTop1, buttonsTop2);
 		buttonsTop.setStyle("-fx-background-color: #999");
 		buttonsTop.setPadding(new Insets(5));
-		buttonsTop.setPrefWidth(600);
-		buttonsBox.getChildren().addAll(toolsArr);
+		buttonsTop.setPrefWidth(canvas.getWidth());
+
 		borderSlider.setShowTickMarks(true);
 		borderSlider.setShowTickLabels(true);
-		borderSlider.setOnMouseReleased( event -> {
-			if (selectedFigure != null) {
-				Figure auxFig = selectedFigure.clone();
-				selectedFigure.setBorderSize(borderSlider.getValue());
-				addOperation(OperationType.CHANGEBORDER, auxFig, selectedFigure);
-				redrawCanvas();
-			}
-		});
-		lineColorPicker.setOnAction( event -> {
-			if (selectedFigure != null) {
-				Figure auxFig = selectedFigure.clone();
-				selectedFigure.setLineColor(lineColorPicker.getValue());
-				addOperation(OperationType.CHANGECOLOR, auxFig, selectedFigure);
-				redrawCanvas();
-			}
-		});
-		fillColorPicker.setOnAction( event -> {
-			if (selectedFigure != null) {
-				Figure auxFig = selectedFigure.clone();
-				selectedFigure.setFillColor(fillColorPicker.getValue());
-				addOperation(OperationType.CHANGEFILL, auxFig, selectedFigure);
-				redrawCanvas();
-			}
-		});
+		buttonsBox.getChildren().addAll(toolsArr);
 		buttonsBox.getChildren().addAll(sliderName, borderSlider, lineColorPicker, fillName, fillColorPicker);
 		buttonsBox.setPadding(new Insets(5));
 		buttonsBox.setStyle("-fx-background-color: #999");
@@ -238,12 +196,81 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+		borderSlider.setOnMouseReleased( event -> {
+			if (selectedFigure != null) {
+				Figure auxFig = selectedFigure.clone();
+				selectedFigure.setBorderSize(borderSlider.getValue());
+				addOperation(OperationType.CHANGEBORDER, auxFig, selectedFigure);
+				redrawCanvas();
+			}
+		});
+		lineColorPicker.setOnAction( event -> {
+			if (selectedFigure != null) {
+				Figure auxFig = selectedFigure.clone();
+				selectedFigure.setLineColor(lineColorPicker.getValue());
+				addOperation(OperationType.CHANGECOLOR, auxFig, selectedFigure);
+				redrawCanvas();
+			}
+		});
+		fillColorPicker.setOnAction( event -> {
+			if (selectedFigure != null) {
+				Figure auxFig = selectedFigure.clone();
+				selectedFigure.setFillColor(fillColorPicker.getValue());
+				addOperation(OperationType.CHANGEFILL, auxFig, selectedFigure);
+				redrawCanvas();
+			}
+		});
+
+		copyFormatButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				addOperation(OperationType.COPYFORMAT, canvasState.getFormatFigure(), selectedFigure);
+				canvasState.setFormatFigure(selectedFigure);
+			}
+		});
+		undoButton.setOnAction(event -> {
+			operationsHistory.undoOperation();
+			updateUndosRedos();
+			redrawCanvas();
+		});
+		redoButton.setOnAction(event -> {
+			operationsHistory.redoOperation();
+			updateUndosRedos();
+			redrawCanvas();
+		});
 		deleteButton.setOnAction(event -> {
 			if (selectedFigure != null) {
 				canvasState.deleteFigure(selectedFigure);
 				addOperation(OperationType.DELETE, selectedFigure, null);
 				selectedFigure = null;
 				redrawCanvas();
+			}
+		});
+
+		cutButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				Figure clipBoardFig = canvasState.getClipBoardFigure();
+				canvasState.setClipBoardFigure(selectedFigure);
+				addOperation(OperationType.CUTFIGURE, clipBoardFig, selectedFigure);
+				canvasState.deleteFigure(selectedFigure);
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+		copyButton.setOnAction(event -> {
+			if (selectedFigure != null){
+				Figure clipBoardFig = canvasState.getClipBoardFigure();
+				canvasState.setClipBoardFigure(selectedFigure);
+				addOperation(OperationType.COPYFIGURE, clipBoardFig, selectedFigure);
+			}
+		});
+		pasteButton.setOnAction(event -> {
+			Figure clipBoardFig = canvasState.getClipBoardFigure();
+			if(clipBoardFig != null) {
+				Figure newFigure = clipBoardFig.getCenteredCopy(canvas.getWidth()/2, canvas.getHeight()/2);
+				canvasState.addFigure(newFigure);
+				redrawCanvas();
+				canvasState.clearClipBoardFigure();
+				addOperation(OperationType.PASTEFIGURE, clipBoardFig, newFigure);
 			}
 		});
 
@@ -263,35 +290,6 @@ public class PaintPane extends BorderPane {
 				deleteButton.fire();
 		});
 
-		cutButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				Figure clipBoardFig = canvasState.getClipBoardFigure();
-				canvasState.setClipBoardFigure(selectedFigure);
-				addOperation(OperationType.CUTFIGURE, clipBoardFig, selectedFigure);
-				canvasState.deleteFigure(selectedFigure);
-				selectedFigure = null;
-				redrawCanvas();
-			}
-		});
-
-		copyButton.setOnAction(event -> {
-			if (selectedFigure != null){
-				Figure clipBoardFig = canvasState.getClipBoardFigure();
-				canvasState.setClipBoardFigure(selectedFigure);
-				addOperation(OperationType.COPYFIGURE, clipBoardFig, selectedFigure);
-			}
-		});
-		pasteButton.setOnAction(event -> {
-			Figure clipBoardFig = canvasState.getClipBoardFigure();
-			if(clipBoardFig != null) {
-				Figure newFigure = clipBoardFig.getCenteredCopy(canvas.getWidth()/2, canvas.getHeight()/2);
-				canvasState.addFigure(newFigure);
-				redrawCanvas();
-				canvasState.clearClipBoardFigure();
-				addOperation(OperationType.PASTEFIGURE, clipBoardFig, newFigure);
-			}
-		});
-
 		setTop(buttonsTop);
 		setLeft(buttonsBox);
 		setRight(canvas);
@@ -309,6 +307,11 @@ public class PaintPane extends BorderPane {
 			gc.setLineWidth(figure.getBorderSize());
 			figure.draw(gc);
 		}
+	}
+
+	private void setStyle(Label label, Pos pos, double width) {
+		label.setAlignment(pos);
+		label.setPrefWidth(width);
 	}
 
 	private void addOperation(OperationType operationType, Figure oldFigure, Figure newFigure) {
