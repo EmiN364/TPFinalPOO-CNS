@@ -1,13 +1,15 @@
 package backend.model;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Ellipse extends Figure {
     private static final String NAME = "Elipse";
     private final Point centerPoint;
     private final double sMayorAxis, sMinorAxis;
 
-    public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
+    public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis, Color lineColor, Color fillColor, double borderSize) {
+        super(lineColor, fillColor, borderSize);
         this.centerPoint = centerPoint;
         this.sMayorAxis = sMayorAxis;
         this.sMinorAxis = sMinorAxis;
@@ -50,5 +52,10 @@ public class Ellipse extends Figure {
     public void draw(GraphicsContext gc) {
         gc.strokeOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
         gc.fillOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
+    }
+
+    @Override
+    public Figure clone() {
+        return new Ellipse(getCenterPoint(), getsMayorAxis(), getsMinorAxis(), getLineColor(), getFillColor(), getBorderSize());
     }
 }

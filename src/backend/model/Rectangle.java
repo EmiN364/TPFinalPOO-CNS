@@ -1,11 +1,13 @@
 package backend.model;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Rectangle extends Figure {
     private static final String NAME = "Rectángulo";
     private final Point topLeft, bottomRight;
-    public Rectangle(Point topLeft, Point bottomRight) {
+    public Rectangle(Point topLeft, Point bottomRight, Color lineColor, Color fillColor, double borderSize) {
+        super(lineColor, fillColor, borderSize);
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
     }
@@ -46,5 +48,10 @@ public class Rectangle extends Figure {
                 Math.abs(getTopLeft().getX() - getBottomRight().getX()), Math.abs(getTopLeft().getY() - getBottomRight().getY()));
         gc.strokeRect(getTopLeft().getX(), getTopLeft().getY(),
                 Math.abs(getTopLeft().getX() - getBottomRight().getX()), Math.abs(getTopLeft().getY() - getBottomRight().getY()));
+    }
+
+    @Override
+    public Figure clone() {
+        return new Rectangle(getTopLeft(), getBottomRight(), getLineColor(), getFillColor(), getBorderSize());
     }
 }
