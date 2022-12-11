@@ -54,4 +54,13 @@ public class Rectangle extends Figure {
     public Figure clone() {
         return new Rectangle(getTopLeft(), getBottomRight(), getLineColor(), getFillColor(), getBorderSize());
     }
+
+    @Override
+    public Figure getCenteredCopy(double widthC, double heightC) {
+        double height = getBottomRight().getX() - getTopLeft().getX();
+        double width = getBottomRight().getY() - getTopLeft().getY();
+        Point topLeft = new Point(widthC - height/2, heightC - width/2);
+        Point bottomRight = new Point(widthC + height/2, heightC + width/2);
+        return new Rectangle(topLeft, bottomRight, getLineColor(), getFillColor(), getBorderSize());
+    }
 }
