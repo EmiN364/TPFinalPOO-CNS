@@ -18,6 +18,7 @@ public class AppLauncher extends Application {
 		Scene scene = new Scene(frame);
 		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
+		primaryStage.setTitle("Paint POO");
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(event -> System.exit(0));
 	}
