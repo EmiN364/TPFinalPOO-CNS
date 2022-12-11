@@ -30,9 +30,14 @@ public class FigureStyle {
     public void setBorderSize(double borderSize) {
         this.borderSize = borderSize;
     }
+
     public void copyFormat(Figure figure) {
         setFillColor(figure.getFillColor());
         setLineColor(figure.getLineColor());
         setBorderSize(figure.getBorderSize());
+    }
+
+    public FigureStyle getCopy() {
+        return new FigureStyle(getFillColor(), getLineColor(), getBorderSize());
     }
 }

@@ -29,12 +29,9 @@ public enum OperationType {
             newFigure.setLineColor(oldFigure.getLineColor());
             oldFigure.setLineColor(aux);
         }
-
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            Color aux = newFigure.getLineColor();
-            newFigure.setLineColor(oldFigure.getLineColor());
-            oldFigure.setLineColor(aux);
+            CHANGECOLOR.undo(oldFigure, newFigure, canvasState);
         }
     },
     CHANGEFILL("Cambiar color de relleno de ") {
@@ -44,14 +41,10 @@ public enum OperationType {
             newFigure.setFillColor(oldFigure.getFillColor());
             oldFigure.setFillColor(aux);
         }
-
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            Color aux = newFigure.getFillColor();
-            newFigure.setFillColor(oldFigure.getFillColor());
-            oldFigure.setFillColor(aux);
+            CHANGEFILL.undo(oldFigure, newFigure, canvasState);
         }
-
     },
     CHANGEBORDER("Cambiar tamaño del borde de ") {
         @Override
@@ -61,22 +54,29 @@ public enum OperationType {
             oldFigure.setBorderSize(aux);
         }
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            Color aux = newFigure.getFillColor();
-            newFigure.setFillColor(oldFigure.getFillColor());
-            oldFigure.setFillColor(aux);
+            CHANGEBORDER.undo(oldFigure, newFigure, canvasState);
         }
     },
     COPYFORMAT("Copiar formato de ") {
         @Override
         public void undo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            canvasState.setClipBoardFigure(newFigure.clone());
-            newFigure.copyFormat(oldFigure);
+            canvasState.setFormatFigure(oldFigure);
         }
-
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            newFigure.copyFormat(canvasState.getClipBoardFigure());
-            canvasState.setClipBoardFigure(null);
+            canvasState.setFormatFigure(newFigure);
+        }
+    },
+    PASTEFORMAT("Pegar formato a ") {
+        @Override
+        public void undo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
+            canvasState.setFormatFigure(newFigure.clone());
+            newFigure.copyFormat(oldFigure);
+        }
+        @Override
+        public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
+            newFigure.copyFormat(canvasState.getFormatFigure());
+            canvasState.clearFormatFigure();
         }
     },
     COPYFIGURE("Copiar un ") {
@@ -100,7 +100,7 @@ public enum OperationType {
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
             canvasState.setClipBoardFigure(newFigure);
-            canvasState.deleteFigure(oldFigure);
+            canvasState.deleteFigure(newFigure);
         }
     },
     PASTEFIGURE("Pegar un ") {
@@ -113,7 +113,7 @@ public enum OperationType {
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
             canvasState.addFigure(newFigure);
-            canvasState.setClipBoardFigure(null);
+            canvasState.clearClipBoardFigure();
         }
     };
 

@@ -2,7 +2,6 @@ package frontend;
 
 import backend.model.*;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.paint.Color;
 
 public class FigureButton extends ToggleButton {
     private final FigureType figureType;

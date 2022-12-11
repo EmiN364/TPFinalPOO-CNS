@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasState {
-    private Figure clipBoardFigure;
+    private Figure clipBoardFigure, formatFigure;
 
     private final List<Figure> list = new ArrayList<>();
 
@@ -32,5 +32,14 @@ public class CanvasState {
 
     public Figure getClipBoardFigure() {
         return clipBoardFigure;
+    }
+    public void setFormatFigure(Figure figure) {
+        this.formatFigure = figure;
+    }
+    public void clearFormatFigure() {
+        this.formatFigure = null;
+    }
+    public Figure getFormatFigure() {
+        return formatFigure;
     }
 }

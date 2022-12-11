@@ -18,5 +18,15 @@ public class Circle extends Ellipse {
         return getsMayorAxis() / 2;
     }
 
+    @Override
+    public Figure clone() {
+        return new Circle(getCenterPoint(), getsMayorAxis() / 2, getFigureStyleCopy());
+    }
+
+    @Override
+    public Figure getCenteredCopy(double widthC, double heightC) {
+        Point centerPoint = new Point(widthC, heightC);
+        return new Circle(centerPoint, getsMayorAxis() / 2, getFigureStyleCopy());
+    }
 }
 

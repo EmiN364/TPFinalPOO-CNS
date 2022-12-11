@@ -46,11 +46,6 @@ public class PaintPane extends BorderPane {
 	Label fillName = new Label("Relleno");
 
 	//Botones para barra superior
-	private Image getIcon(String name) {
-		String IconPath = ResourceBundle.getBundle(HTMLEditorSkin.class.getName()).getString(name);
-		return new Image(Objects.requireNonNull(HTMLEditorSkin.class.getResource(IconPath)).toString());
-	}
-
 	Button cutButton = new Button("Cortar", new ImageView(getIcon("cutIcon")));
 	Button copyButton = new Button("Copiar", new ImageView(getIcon("copyIcon")));
 	Button pasteButton = new Button("Pegar", new ImageView(getIcon("pasteIcon")));
@@ -77,7 +72,8 @@ public class PaintPane extends BorderPane {
 
 		copyFormatButton.setOnAction(event -> {
 			if (selectedFigure != null) {
-				canvasState.setClipBoardFigure(selectedFigure);
+				addOperation(OperationType.COPYFORMAT, canvasState.getFormatFigure(), selectedFigure);
+				canvasState.setFormatFigure(selectedFigure);
 			}
 		});
 		undoButton.setOnAction(event -> {
@@ -155,17 +151,17 @@ public class PaintPane extends BorderPane {
 
 		canvas.setOnMouseReleased(event -> {
 			Point endPoint = new Point(event.getX(), event.getY());
-			if(startPoint == null) {
+			if (startPoint == null) {
 				return ;
 			}
-			if(endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
+			if (endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
 				return ;
 			}
 			FigureButton[] figureButtons = {rectangleButton, circleButton, squareButton, ellipseButton};
 			Figure newFigure = null;
-			for(FigureButton figureButton : figureButtons) {
+			for (FigureButton figureButton : figureButtons) {
 				if (figureButton.isSelected())
-					newFigure = figureButton.getFigureType().create(startPoint, endPoint, lineColorPicker.getValue(), fillColorPicker.getValue(), borderSlider.getValue());
+					newFigure = figureButton.getFigureType().create(startPoint, endPoint, getCurrentStyle());
 			}
 			if (newFigure == null)
 				return;
@@ -179,13 +175,13 @@ public class PaintPane extends BorderPane {
 			Point eventPoint = new Point(event.getX(), event.getY());
 			boolean found = false;
 			StringBuilder label = new StringBuilder();
-			for(Figure figure : canvasState.figures()) {
-				if(figureBelongs(figure, eventPoint)) {
+			for (Figure figure : canvasState.figures()) {
+				if (figure.belongs(eventPoint)) {
 					found = true;
 					label.append(figure);
 				}
 			}
-			if(found) {
+			if (found) {
 				statusPane.updateStatus(label.toString());
 			} else {
 				statusPane.updateStatus(eventPoint.toString());
@@ -193,12 +189,12 @@ public class PaintPane extends BorderPane {
 		});
 
 		canvas.setOnMouseClicked(event -> {
-			if(selectionButton.isSelected()) {
+			if (selectionButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
 				for (Figure figure : canvasState.figures()) {
-					if(figureBelongs(figure, eventPoint)) {
+					if(figure.belongs(eventPoint)) {
 						found = true;
 						selectedFigure = figure;
 						label.append(figure);
@@ -211,28 +207,28 @@ public class PaintPane extends BorderPane {
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
 				redrawCanvas();
-			} else if(copyFormatButton.isSelected()) {
+			} else if (copyFormatButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				Figure clickedFigure = null;
-				Figure clipBoardFigure = canvasState.getClipBoardFigure();
+				Figure formatFigure = canvasState.getFormatFigure();
 				for (Figure figure : canvasState.figures()) {
-					if(figureBelongs(figure, eventPoint)) {
+					if (figure.belongs(eventPoint)) {
 						clickedFigure = figure;
 					}
 				}
-				if (clickedFigure != null && clipBoardFigure != null) {
+				if (clickedFigure != null && formatFigure != null) {
 					Figure oldFigure = clickedFigure.clone();
-					clickedFigure.copyFormat(clipBoardFigure);
-					addOperation(OperationType.COPYFORMAT, oldFigure, clickedFigure);
-					canvasState.setClipBoardFigure(null);
+					clickedFigure.copyFormat(formatFigure);
+					addOperation(OperationType.PASTEFORMAT, oldFigure, clickedFigure);
+					canvasState.clearFormatFigure();
+					selectedFigure = null;
 					redrawCanvas();
 				}
 			}
-
 		});
 
 		canvas.setOnMouseDragged(event -> {
-			if(selectionButton.isSelected()) {
+			if (selectionButton.isSelected()) {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
@@ -291,7 +287,7 @@ public class PaintPane extends BorderPane {
 				Figure newFigure = clipBoardFig.getCenteredCopy(canvas.getWidth()/2, canvas.getHeight()/2);
 				canvasState.addFigure(newFigure);
 				redrawCanvas();
-				canvasState.setClipBoardFigure(null);
+				canvasState.clearClipBoardFigure();
 				addOperation(OperationType.PASTEFIGURE, clipBoardFig, newFigure);
 			}
 		});
@@ -301,7 +297,7 @@ public class PaintPane extends BorderPane {
 		setRight(canvas);
 	}
 
-	void redrawCanvas() {
+	private void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for(Figure figure : canvasState.figures()) {
 			if(figure == selectedFigure) {
@@ -327,7 +323,13 @@ public class PaintPane extends BorderPane {
 		redoNext.setText(operationsHistory.getNextRedo());
 	}
 
-	boolean figureBelongs(Figure figure, Point eventPoint) {
-		return figure.belongs(eventPoint);
+	private Image getIcon(String name) {
+		String IconPath = ResourceBundle.getBundle(HTMLEditorSkin.class.getName()).getString(name);
+		return new Image(Objects.requireNonNull(HTMLEditorSkin.class.getResource(IconPath)).toString());
 	}
+
+	private FigureStyle getCurrentStyle() {
+		return new FigureStyle(fillColorPicker.getValue(), lineColorPicker.getValue(), borderSlider.getValue());
+	}
+
 }
