@@ -222,6 +222,15 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+		deleteButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				canvasState.deleteFigure(selectedFigure);
+				addOperation(OperationType.DELETE, selectedFigure, null);
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
 		undoButton.setOnAction(event -> {
 			operationsHistory.undoOperation();
 			updateUndosRedos();
@@ -231,14 +240,6 @@ public class PaintPane extends BorderPane {
 			operationsHistory.redoOperation();
 			updateUndosRedos();
 			redrawCanvas();
-		});
-		deleteButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				canvasState.deleteFigure(selectedFigure);
-				addOperation(OperationType.DELETE, selectedFigure, null);
-				selectedFigure = null;
-				redrawCanvas();
-			}
 		});
 
 		copyFormatButton.setOnAction(event -> {
@@ -293,8 +294,8 @@ public class PaintPane extends BorderPane {
 
 	private void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		for(Figure figure : canvasState.figures()) {
-			if(figure == selectedFigure) {
+		for (Figure figure : canvasState.figures()) {
+			if (figure == selectedFigure) {
 				gc.setStroke(Color.RED);
 			} else {
 				gc.setStroke(figure.getLineColor());
