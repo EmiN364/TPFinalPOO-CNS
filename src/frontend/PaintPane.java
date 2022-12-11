@@ -8,6 +8,7 @@ import com.sun.javafx.scene.web.skin.HTMLEditorSkin;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -46,11 +47,11 @@ public class PaintPane extends BorderPane {
 	Label fillName = new Label("Relleno");
 
 	//Botones para barra superior
-	Button cutButton = new Button("Cortar", new ImageView(getIcon("cutIcon")));
-	Button copyButton = new Button("Copiar", new ImageView(getIcon("copyIcon")));
-	Button pasteButton = new Button("Pegar", new ImageView(getIcon("pasteIcon")));
-	Button undoButton = new Button("Deshacer", new ImageView(getIcon("undoIcon")));
-	Button redoButton = new Button("Rehacer", new ImageView(getIcon("redoIcon")));
+	ControlButton cutButton = new ControlButton("Cortar", new ImageView(getIcon("cutIcon")), KeyCode.X);
+	ControlButton copyButton = new ControlButton("Copiar", new ImageView(getIcon("copyIcon")), KeyCode.C);
+	ControlButton pasteButton = new ControlButton("Pegar", new ImageView(getIcon("pasteIcon")), KeyCode.V);
+	ControlButton undoButton = new ControlButton("Deshacer", new ImageView(getIcon("undoIcon")), KeyCode.Z);
+	ControlButton redoButton = new ControlButton("Rehacer", new ImageView(getIcon("redoIcon")), KeyCode.Y);
 	Label undoNext = new Label();
 	Label redoNext = new Label();
 	Label undoAmount = new Label("0");
@@ -221,12 +222,6 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		copyFormatButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				addOperation(OperationType.COPYFORMAT, canvasState.getFormatFigure(), selectedFigure);
-				canvasState.setFormatFigure(selectedFigure);
-			}
-		});
 		undoButton.setOnAction(event -> {
 			operationsHistory.undoOperation();
 			updateUndosRedos();
@@ -246,6 +241,12 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+		copyFormatButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				addOperation(OperationType.COPYFORMAT, canvasState.getFormatFigure(), selectedFigure);
+				canvasState.setFormatFigure(selectedFigure);
+			}
+		});
 		cutButton.setOnAction(event -> {
 			if (selectedFigure != null) {
 				Figure clipBoardFig = canvasState.getClipBoardFigure();
@@ -274,19 +275,14 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
+		ControlButton[] controlButtons = {cutButton, copyButton, pasteButton, undoButton, redoButton};
 		setOnKeyPressed( event -> {
 			if (event.isControlDown()) {
-				if (event.getCode() == KeyCode.X)
-					cutButton.fire();
-				else if (event.getCode() == KeyCode.C)
-					copyButton.fire();
-				else if (event.getCode() == KeyCode.V)
-					pasteButton.fire();
-				else if (event.getCode() == KeyCode.Z)
-					undoButton.fire();
-				else if (event.getCode() == KeyCode.Y)
-					redoButton.fire();
-			} else if (event.getCode() == KeyCode.DELETE)
+				for (ControlButton controlButton : controlButtons) {
+					if (event.getCode().equals(controlButton.keyCode))
+						controlButton.fire();
+				}
+			} else if (event.getCode().equals(KeyCode.DELETE))
 				deleteButton.fire();
 		});
 
@@ -335,4 +331,12 @@ public class PaintPane extends BorderPane {
 		return new FigureStyle(fillColorPicker.getValue(), lineColorPicker.getValue(), borderSlider.getValue());
 	}
 
+	private static class ControlButton extends Button {
+		private final KeyCode keyCode;
+
+		public ControlButton(String text, Node graphic, KeyCode keyCode) {
+			super(text, graphic);
+			this.keyCode = keyCode;
+		}
+	}
 }
