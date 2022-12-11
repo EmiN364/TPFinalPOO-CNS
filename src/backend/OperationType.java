@@ -70,12 +70,12 @@ public enum OperationType {
         @Override
         public void undo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
             canvasState.setClipBoardFigure(newFigure.clone());
-            newFigure.setFormat(oldFigure);
+            newFigure.copyFormat(oldFigure);
         }
 
         @Override
         public void redo(Figure oldFigure, Figure newFigure, CanvasState canvasState) {
-            newFigure.setFormat(canvasState.getClipBoardFigure());
+            newFigure.copyFormat(canvasState.getClipBoardFigure());
             canvasState.setClipBoardFigure(null);
         }
     },

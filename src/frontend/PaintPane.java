@@ -222,7 +222,7 @@ public class PaintPane extends BorderPane {
 				}
 				if (clickedFigure != null && clipBoardFigure != null) {
 					Figure oldFigure = clickedFigure.clone();
-					clickedFigure.setFormat(clipBoardFigure);
+					clickedFigure.copyFormat(clipBoardFigure);
 					addOperation(OperationType.COPYFORMAT, oldFigure, clickedFigure);
 					canvasState.setClipBoardFigure(null);
 					redrawCanvas();

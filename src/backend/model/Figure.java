@@ -4,44 +4,38 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public abstract class Figure implements Cloneable {
-    private Color lineColor, fillColor;
-    private double borderSize;
+    private final FigureStyle figureStyle;
 
-    public Figure(Color lineColor, Color fillColor, double borderSize) {
-        this.lineColor = lineColor;
-        this.fillColor = fillColor;
-        this.borderSize = borderSize;
+    public Figure(FigureStyle figureStyle) {
+        this.figureStyle = figureStyle;
     }
 
     public abstract String getName();
 
-    public double getBorderSize() {
-        return borderSize;
+    public FigureStyle getFigureStyle() {
+        return figureStyle;
     }
-
-    public void setBorderSize(double borderSize) {
-        this.borderSize = borderSize;
-    }
-
-    public Color getLineColor() {
-        return lineColor;
-    }
-
-    public void setLineColor(Color lineColor) {
-        this.lineColor = lineColor;
-    }
-
     public Color getFillColor() {
-        return fillColor;
+        return figureStyle.getFillColor();
+    }
+    public void setFillColor(Color fillColor) {
+        figureStyle.setFillColor(fillColor);
+    }
+    public Color getLineColor() {
+        return figureStyle.getLineColor();
+    }
+    public void setLineColor(Color lineColor) {
+        figureStyle.setLineColor(lineColor);
+    }
+    public double getBorderSize() {
+        return figureStyle.getBorderSize();
+    }
+    public void setBorderSize(double borderSize) {
+        figureStyle.setBorderSize(borderSize);
     }
 
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
-    }
-    public void setFormat(Figure figure) {
-        setFillColor(figure.getFillColor());
-        setLineColor(figure.getLineColor());
-        setBorderSize(figure.getBorderSize());
+    public void copyFormat(Figure figure) {
+        figureStyle.copyFormat(figure);
     }
 
     public abstract void move(double diffX, double diffY);
