@@ -50,4 +50,7 @@ public abstract class Figure implements Cloneable {
 
     @Override
     public abstract Figure clone();
+
+    public abstract Figure getCenteredCopy(double widthC, double heightC);
+
 }

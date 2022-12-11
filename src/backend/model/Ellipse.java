@@ -58,4 +58,10 @@ public class Ellipse extends Figure {
     public Figure clone() {
         return new Ellipse(getCenterPoint(), getsMayorAxis(), getsMinorAxis(), getLineColor(), getFillColor(), getBorderSize());
     }
+
+    @Override
+    public Figure getCenteredCopy(double widthC, double heightC) {
+        Point centerPoint = new Point(widthC, heightC);
+        return new Ellipse(centerPoint, getsMayorAxis(), getsMinorAxis(), getLineColor(), getFillColor(), getBorderSize());
+    }
 }
