@@ -33,10 +33,10 @@ public class PaintPane extends BorderPane {
 
 	// Botones Barra Izquierda
 	ToggleButton selectionButton = new ToggleButton("Seleccionar");
-	ToggleButton rectangleButton = new ToggleButton("Rectángulo");
-	ToggleButton circleButton = new ToggleButton("Círculo");
-	ToggleButton squareButton = new ToggleButton("Cuadrado");
-	ToggleButton ellipseButton = new ToggleButton("Elipse");
+	FigureButton rectangleButton = new FigureButton("Rectángulo", FigureButton.FigureType.RECTANGLE);
+	FigureButton circleButton = new FigureButton("Círculo", FigureButton.FigureType.CIRCLE);
+	FigureButton squareButton = new FigureButton("Cuadrado", FigureButton.FigureType.SQUARE);
+	FigureButton ellipseButton = new FigureButton("Elipse", FigureButton.FigureType.ELLIPSE);
 	ToggleButton deleteButton = new ToggleButton("Borrar");
 	ToggleButton copyFormatButton = new ToggleButton("Cop. Form.");
 	Slider borderSlider = new Slider(1, 50, 25);
