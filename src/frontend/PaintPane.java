@@ -77,7 +77,6 @@ public class PaintPane extends BorderPane {
 
 		copyFormatButton.setOnAction(event -> {
 			if (selectedFigure != null) {
-//				addOperation(OperationType.COPYFORMAT, canvasState.getAuxFigure(), selectedFigure);
 				canvasState.setAuxFigure(selectedFigure);
 			}
 		});
@@ -103,9 +102,7 @@ public class PaintPane extends BorderPane {
 		HBox buttonsTop1 = new HBox(10);
 		HBox buttonsTop2 = new HBox(10);
 
-		buttonsTop2.getChildren().addAll(undoNext, undoAmount);
-		buttonsTop2.getChildren().addAll(undoButton, redoButton);
-		buttonsTop2.getChildren().addAll(redoAmount, redoNext);
+		buttonsTop2.getChildren().addAll(undoNext, undoAmount, undoButton, redoButton, redoAmount, redoNext);
 		undoNext.setAlignment(Pos.CENTER_RIGHT);
 		undoNext.setPrefWidth(300);
 		redoNext.setPrefWidth(300);
