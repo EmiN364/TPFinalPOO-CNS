@@ -24,51 +24,40 @@ import java.util.ResourceBundle;
 public class PaintPane extends BorderPane {
 
 	// BackEnd
-	CanvasState canvasState;
+	private final CanvasState canvasState;
 
 	// Canvas y relacionados
-	Canvas canvas = new Canvas(800, 600);
-	GraphicsContext gc = canvas.getGraphicsContext2D();
-	Color lineColor = Color.BLACK;
-	Color fillColor = Color.YELLOW;
+	private final Canvas canvas = new Canvas(800, 600);
+	private final GraphicsContext gc = canvas.getGraphicsContext2D();
+	private final Color lineColor = Color.BLACK;
+	private final Color fillColor = Color.YELLOW;
 
 	// Botones Barra Izquierda
-	ToggleButton selectionButton = new ToggleButton("Seleccionar");
-	FigureButton rectangleButton = new FigureButton("Rectángulo", FigureButton.FigureType.RECTANGLE);
-	FigureButton circleButton = new FigureButton("Círculo", FigureButton.FigureType.CIRCLE);
-	FigureButton squareButton = new FigureButton("Cuadrado", FigureButton.FigureType.SQUARE);
-	FigureButton ellipseButton = new FigureButton("Elipse", FigureButton.FigureType.ELLIPSE);
-	ToggleButton deleteButton = new ToggleButton("Borrar");
-	ToggleButton copyFormatButton = new ToggleButton("Cop. Form.");
-	Slider borderSlider = new Slider(1, 50, 25);
-	ColorPicker lineColorPicker = new ColorPicker(lineColor);
-	ColorPicker fillColorPicker = new ColorPicker(fillColor);
-	Label sliderName = new Label("Borde");
-	Label fillName = new Label("Relleno");
-
-	//Botones para barra superior
-	ControlButton cutButton = new ControlButton("Cortar", new ImageView(getIcon("cutIcon")), KeyCode.X);
-	ControlButton copyButton = new ControlButton("Copiar", new ImageView(getIcon("copyIcon")), KeyCode.C);
-	ControlButton pasteButton = new ControlButton("Pegar", new ImageView(getIcon("pasteIcon")), KeyCode.V);
-	ControlButton undoButton = new ControlButton("Deshacer", new ImageView(getIcon("undoIcon")), KeyCode.Z);
-	ControlButton redoButton = new ControlButton("Rehacer", new ImageView(getIcon("redoIcon")), KeyCode.Y);
-	Label undoNext = new Label();
-	Label redoNext = new Label();
-	Label undoAmount = new Label("0");
-	Label redoAmount = new Label("0");
+	private final ToggleButton selectionButton = new ToggleButton("Seleccionar");
+	private final FigureButton rectangleButton = new FigureButton("Rectángulo", FigureButton.FigureType.RECTANGLE);
+	private final FigureButton circleButton = new FigureButton("Círculo", FigureButton.FigureType.CIRCLE);
+	private final FigureButton squareButton = new FigureButton("Cuadrado", FigureButton.FigureType.SQUARE);
+	private final FigureButton ellipseButton = new FigureButton("Elipse", FigureButton.FigureType.ELLIPSE);
+	private final ToggleButton deleteButton = new ToggleButton("Borrar");
+	private final ToggleButton copyFormatButton = new ToggleButton("Cop. Form.");
+	private final Slider borderSlider = new Slider(1, 50, 25);
+	private final ColorPicker lineColorPicker = new ColorPicker(lineColor);
+	private final ColorPicker fillColorPicker = new ColorPicker(fillColor);
+	private final Label undoNext = new Label();
+	private final Label redoNext = new Label();
+	private final Label undoAmount = new Label("0");
+	private final Label redoAmount = new Label("0");
 
 	// Dibujar una figura
-	Point startPoint;
+	private Point startPoint;
 	// Seleccionar una figura
-	Figure selectedFigure;
-	// StatusBar
-	StatusPane statusPane;
+	private Figure selectedFigure;
 	// Operations
-	OperationsHistory operationsHistory;
+	private final OperationsHistory operationsHistory;
 
 	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
-		this.statusPane = statusPane;
+		// StatusBar
 		this.operationsHistory = new OperationsHistory(canvasState);
 
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton, copyFormatButton};
@@ -87,10 +76,16 @@ public class PaintPane extends BorderPane {
 		setStyle(redoNext, Pos.CENTER_LEFT, 300);
 		setStyle(undoAmount, Pos.CENTER, 30);
 		setStyle(redoAmount, Pos.CENTER, 30);
+		ControlButton redoButton = new ControlButton("Rehacer", new ImageView(getIcon("redoIcon")), KeyCode.Y);
+		ControlButton undoButton = new ControlButton("Deshacer", new ImageView(getIcon("undoIcon")), KeyCode.Z);
 		buttonsTop2.getChildren().addAll(undoNext, undoAmount, undoButton, redoButton, redoAmount, redoNext);
 		buttonsTop2.setAlignment(Pos.CENTER);
 
-		buttonsTop1.getChildren().addAll(cutButton,copyButton,pasteButton);
+		//Botones para barra superior
+		ControlButton cutButton = new ControlButton("Cortar", new ImageView(getIcon("cutIcon")), KeyCode.X);
+		ControlButton pasteButton = new ControlButton("Pegar", new ImageView(getIcon("pasteIcon")), KeyCode.V);
+		ControlButton copyButton = new ControlButton("Copiar", new ImageView(getIcon("copyIcon")), KeyCode.C);
+		buttonsTop1.getChildren().addAll(cutButton, copyButton, pasteButton);
 
 		buttonsTop.getChildren().addAll(buttonsTop1, buttonsTop2);
 		buttonsTop.setStyle("-fx-background-color: #999");
@@ -100,6 +95,8 @@ public class PaintPane extends BorderPane {
 		borderSlider.setShowTickMarks(true);
 		borderSlider.setShowTickLabels(true);
 		buttonsBox.getChildren().addAll(toolsArr);
+		Label sliderName = new Label("Borde");
+		Label fillName = new Label("Relleno");
 		buttonsBox.getChildren().addAll(sliderName, borderSlider, lineColorPicker, fillName, fillColorPicker);
 		buttonsBox.setPadding(new Insets(5));
 		buttonsBox.setStyle("-fx-background-color: #999");
