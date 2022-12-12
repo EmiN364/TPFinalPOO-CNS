@@ -2,8 +2,6 @@ package backend;
 
 import backend.model.Figure;
 
-import java.awt.*;
-
 public class Operation {
     private final Figure oldFigure, newFigure;
     private final OperationType operationType;
